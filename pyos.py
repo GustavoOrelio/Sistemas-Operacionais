@@ -34,8 +34,6 @@ class os_t:
 			self.terminal.console_print("\r" + self.console_str)
 		elif (key == curses.KEY_ENTER) or (key == ord('\n')):
 			self.interpret_cmd(self.console_str)
-			self.execut_command(self.console_str)
-			self.syscall(self.console_str)
 			self.console_str = ""
 		
 	#Esta funcao chama a funcao de escrever no terminal quando digitado
@@ -47,17 +45,12 @@ class os_t:
 	def interpret_cmd (self, cmd):
 		if cmd == "sair":
 			self.cpu.cpu_alive = False
+		elif cmd == "abrir":
+			self.terminal.console_print("Carregando processo" + "\n")
 		else:
-			self.terminal.console_print("\rcomando invalido " + cmd + "\n")
+			self.terminal.console_print("comando invalido " + cmd + "\n")
 
-	def execut_command (self, cmd):
-		if cmd == "abrir":
-			self.terminal.console_print("\rCarregando processo" + "\n")
-		else:
-			self.terminal.console_print("\rcomando invalido " + cmd + "\n")
-
-	def syscall (self, cmd):
-		if cmd == "syscalls":
-			self.terminal.console_print("\rExecutando chamada de sistema" + "\n")
-		else:
-			self.terminal.console_print("\rcomando invalido " + cmd + "\n")
+	
+	def syscall (self):
+		self.terminal.console_print("Executando chamada de sistema" + "\n")
+		return
