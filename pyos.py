@@ -4,6 +4,11 @@ import pycfg
 from pyarch import load_binary_into_memory
 from pyarch import cpu_t
 
+class task_t:
+	def __init__ (self):
+		self.regs = [0, 0, 0, 0, 0, 0, 0, 0]
+		self.reg_pc = 0
+
 class os_t:
 	def __init__ (self, cpu, memory, terminal):
 		self.cpu = cpu
