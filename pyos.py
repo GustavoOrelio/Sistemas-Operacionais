@@ -4,10 +4,11 @@ import pycfg
 from pyarch import load_binary_into_memory
 from pyarch import cpu_t
 
-class task_t:
+class estrutura_processo:
 	def __init__ (self):
-		self.regs = [0, 0, 0, 0, 0, 0, 0, 0]
-		self.reg_pc = 0
+		self.registradores = [0, 0, 0, 0, 0, 0, 0, 0]
+		self.registrador_pc = 0
+		self.estado = str("Processo pronto para executar")
 
 class os_t:
 	def __init__ (self, cpu, memory, terminal):
@@ -27,6 +28,7 @@ class os_t:
 		self.terminal.end()
 		self.terminal.dprint("kernel panic: " + msg)
 		self.cpu.cpu_alive = False
+		#cpu.cpu_alive = False
 		
 	def interrupt_keyboard (self):
 		key = self.terminal.get_key_buffer()
@@ -38,24 +40,29 @@ class os_t:
 			self.console_str = self.console_str[:-1]
 			self.terminal.console_print("\r" + self.console_str)
 		elif (key == curses.KEY_ENTER) or (key == ord('\n')):
-			self.interpret_cmd(self.console_str)
+			self.interpretador_comando(self.console_str)
 			self.console_str = ""
 		
-	#Esta funcao chama a funcao de escrever no terminal quando digitado
 	def handle_interrupt (self, interrupt):
 		if interrupt == pycfg.INTERRUPT_KEYBOARD:
 			self.interrupt_keyboard()
 	
 	
-	def interpret_cmd (self, cmd):
-		if cmd == "sair":
+	def interpretador_comando (self, comando):
+		if comando == "sair":
 			self.cpu.cpu_alive = False
-		elif cmd == "abrir":
+		elif comando == "abrir":
 			self.terminal.console_print("Carregando processo" + "\n")
 		else:
-			self.terminal.console_print("comando invalido " + cmd + "\n")
+			self.terminal.console_print("Comando invalido " + comando + "\n")
 
 	
 	def syscall (self):
+		self.estrutura_processo.estado = str("Processo em execucao")
 		self.terminal.console_print("Executando chamada de sistema" + "\n")
+		return
+		
+	def interrupcao (self):
+		self.estrutura_processo.estado = str("Processo bloqueado")
+		self.terminal.console_print("Sistema interrompido" + "\n")
 		return
