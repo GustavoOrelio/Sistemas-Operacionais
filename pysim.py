@@ -17,7 +17,7 @@ def main ():
 		terminal.dprint(cpu.regs)
 		terminal.dprint(memory.data)
 	
-	terminal.dprint("Sistema operacional encerrado")
+	terminal.dprint("pysim halted")
 
 if len(sys.argv) == 1:
 	sim_mode_os = 1
