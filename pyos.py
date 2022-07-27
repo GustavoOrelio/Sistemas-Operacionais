@@ -106,25 +106,25 @@ class os_t:
 	def sched (self, task):
 		if self.current_task is not None:
 			self.panic("current_task must be None when scheduling a new one (current_task="+self.current_task.bin_name+")")
-		if task.state != PYOS_TASK_STATE_READY:
-			self.panic("task "+task.bin_name+" must be in READY state for being scheduled (state = "+str(task.state)+")")
+			if task.state != PYOS_TASK_STATE_READY:
+				self.panic("task "+task.bin_name+" must be in READY state for being scheduled (state = "+str(task.state)+")")
 
 		# TODO
 		# Escrever no processador os registradores de proposito geral salvos na task struct
-		for i in range(0, pycfg.NREGS):
-			self.cpu.set_reg(i, task.regs[i])
+			for i in range(0, pycfg.NREGS):
+				self.cpu.set_reg(i, task.regs[i])
 			
 		# Escrever no processador o PC salvo na task struct
-		self.cpu.set_pc(task.reg_pc)
+			self.cpu.set_pc(task.reg_pc)
 		
 		# Atualizar estado do processo
-		task.state = PYOS_TASK_STATE_EXECUTING
+			task.state = PYOS_TASK_STATE_EXECUTING
 		
 		# Escrever no processador os registradores que configuram a memoria virtual, salvos na task struct
-		self.cpu.set_paddr_max(task.paddr_max)
-		sel.cpu.set_paddr_offset(task.pddr_offset)
-		self.current_task = task
-		self.printk("scheduling task "+task.bin_name)
+			self.cpu.set_paddr_max(task.paddr_max)
+			self.cpu.set_paddr_offset(task.pddr_offset)
+			self.current_task = task
+			self.printk("scheduling task "+task.bin_name)
 
 	def get_task_amount_of_memory (self, task):
 		return task.paddr_max - task.paddr_offset + 1
@@ -139,10 +139,10 @@ class os_t:
 		free_space = 0
 		if self.idle_task is not None:
 			free_space = self.idle_task.paddr_max + 1
-		free_sapce_now = self.memory.get_size() - free_space
+		free_space_now = self.memory.get_size() - free_space
 		
 		if ( words<= free_space_now):
-			return free_space, (free_space+words)-1
+			return free_space, (free_space+words) - 1
 		else:
 			self.printk("could not allocate memory to task "+task.bin_name)
 			return -1, -1
